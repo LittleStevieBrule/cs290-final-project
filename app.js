@@ -1,55 +1,40 @@
-var app = require('express')();
+var express = require('express');
+var app = express();
 var handlebars = require('express-handlebars').create({defaultLayout: 'main'});
 var bodyParser = require('body-parser');
+var fs = require('fs');
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(express.static('views/images'));
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
 app.set('port', 8080);
 
-function requestData(){
-  this.query = [];
-  this.body = [];
-  this.method = "";
-  return this;
-}
-
-function handleRequest(req) {
-  var data = requestData();
-  getQuery(req, data);
-  getBody(req, data);
-  getMethod(req, data);
-  return data;
-}
-
-function getBody(req, data){
-  debugger;
-  for( var param in req.query) {
-    data.query.push({key: param, value: req.query[param] });
-  }
-  return data;
-}
-
-function getQuery(req, data){
-  for( var param in req.body) {
-    data.body.push({key: param, value: req.body[param] });
-  }
-  return data;
-}
-
-function getMethod(req, data){
-  data.method = req.method;
-  return data;
-}
 
 app.get('/', function(req, res) {
-  res.render('request', handleRequest(req));
+    res.render('request', {
+        content: fs.readFileSync('views/front_page.handlebars').toString()
+    });
 });
 
-app.post('/', function(req, res) {
-  res.render('request', handleRequest(req));
-});
+app.get('/about', function (req, res) {
+    res.render('request', {
+        content: fs.readFileSync('views/about.handlebars').toString()
+    });
+} );
+
+app.get('/blog', function (req, res) {
+    res.render('request', {
+        content: fs.readFileSync('views/daily_blog.handlebars').toString()
+    });
+} );
+
+app.get('/resources', function (req, res) {
+    res.render('request', {
+        content: fs.readFileSync('views/resources.handlebars').toString()
+    });
+} );
 
 app.use(function(req, res) {
   res.status(404);
