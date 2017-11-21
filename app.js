@@ -22,19 +22,19 @@ app.get('/about', function (req, res) {
     res.render('request', {
         content: fs.readFileSync('views/about.handlebars').toString()
     });
-} );
+});
 
 app.get('/blog', function (req, res) {
     res.render('request', {
         content: fs.readFileSync('views/daily_blog.handlebars').toString()
     });
-} );
+});
 
 app.get('/resources', function (req, res) {
     res.render('request', {
         content: fs.readFileSync('views/resources.handlebars').toString()
     });
-} );
+});
 
 app.use(function(req, res) {
   res.status(404);
